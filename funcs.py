@@ -64,8 +64,8 @@ def setnewdst(file, y, m, d):
 
 def splitdatetime(dt):
     # gets a date and time YYYY:MM:DD HH:mm:ss and return the Year, Month and Day
-    date, t = dt.split(" ")
-    y, m, d = date.split(":")
+    date = dt.split(" ")
+    y, m, d = date[0].split(":")
     return y, m, d
 
 def searchregex(file, list):
