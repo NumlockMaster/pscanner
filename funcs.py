@@ -4,6 +4,7 @@ from datetime import datetime
 import configparser
 import exifread
 import shutil
+import filecmp
 
 
 def getime():
@@ -70,7 +71,7 @@ def splitdatetime(dt):
 
 def searchregex(file, list):
     # list is [[expr,day,month,year],[expr,day,month,year],....]
-    newfilename = 'unknown'
+    newfilename = file
     i = 0  # a counter to go over all the regular expressions in the list
     while i < len(list) :
         reg = list[i][0]
@@ -84,25 +85,30 @@ def searchregex(file, list):
     return newfilename
 
 
-def copyfile(curfile, newfile):
+def copyfile(curfile: object, newfile: object) -> object:
     newdir = os.path.dirname(newfile)
     remove = True  # boolean variable to determine if need to delete the file after a successful copy operation
-
-    # check if newfile already exist
-    if os.path.isfile(newfile):
-        newfile = newfile + '_1'
+    copy = True  # boolean variable to determine if need to copy file
 
     if not os.path.exists(newdir):
         os.makedirs(newdir)
 
-    dprint("copy " + curfile + " to " + newfile)
-    try:
-        shutil.copy(curfile, newfile)
+    # check if newfile already exist - if exist check if they are the same - if the same dont copy
+    if os.path.isfile(newfile):
+        if filecmp.cmp(curfile, newfile):
+            dprint(curfile+' and '+newfile+' are the same!')
+            dprint('Dont need to copy the file!')
+            copy = False  # dont need to copy file
 
-    except Exception as error:
-        dprint(error)
-        dprint("Unable to copy file " + curfile)
-        remove = False
+    if copy:
+        dprint("copy " + curfile + " to " + newfile)
+        try:
+            shutil.copy(curfile, newfile)
+
+        except Exception as error:
+            dprint(error)
+            dprint("Unable to copy file " + curfile)
+            remove = False
 
     if remove:
         try:
@@ -110,7 +116,7 @@ def copyfile(curfile, newfile):
         except Exception as e:
             dprint(e)
             dprint('Unable to remove file: ' + curfile)
-
     else:
         dprint('Will not remove ' + curfile)
 
+    return copy

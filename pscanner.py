@@ -46,7 +46,7 @@ def main():
 		sys.exit(check)
 
 	cnt = 0 # count number of files processed
-
+	copycnt = 0  # counter of copied files
 	# load all regular expressions into a list
 	expr_list = load_regex('reg.ini')
 
@@ -54,9 +54,11 @@ def main():
 	if os.path.isdir(params["srcdir"]):
 		for root, dirs, files in os.walk(params["srcdir"]):
 			for file in files:
+				newfiledir = params["dstdir"]
 				cnt += 1
+				curfile = os.path.join(root, file)
 				try:
-					datetime = get_original_datetime(os.path.join(root, file))
+					datetime = get_original_datetime(curfile)
 
 				except Exception as err:
 					dprint('Cant get info from file!')
@@ -64,20 +66,30 @@ def main():
 					datetime = 'None'
 
 				if datetime != 'None':
+					# if a date was found using EXIF
 					dateval = splitdatetime(datetime)
 					newfilename = setnewdst(file, dateval[0], dateval[1], dateval[2])
 				else:
+					# try to search a matching pattern
 					newfilename = searchregex(file, expr_list)
+					if newfilename == file:
+						# did not find a matching pattern
+						newfiledir =  os.path.join(params["dstdir"], 'unknown')
+						if not os.path.exists(newfiledir):
+							os.makedirs(newfiledir)
 
-				newfile = os.path.join(params["dstdir"], newfilename)
-				dprint(file + ' --> ' + newfile)
+				newfile = os.path.join(newfiledir, newfilename)
+
+				dprint(curfile + ' --> ' + newfile)
 
 				if params["copyflag"]:
 					# need to copy file to new location
-					curfile = os.path.join(params["srcdir"], file)
-					copyfile(curfile, newfile)
+					if copyfile(curfile, newfile):
+						copycnt+=1
+
 
 	dprint('Processed ' + str(cnt) + ' files!')
+	dprint('Only ' + str(copycnt) + ' files were copied!')
 	dprint('Have a nice day!')
 
 
