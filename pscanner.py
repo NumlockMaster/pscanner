@@ -2,7 +2,7 @@ import sys
 from funcs import *
 
 def init():
-
+	#  Check usage and setup initial parameters
 	dict = {
 		'copyflag': False,
 		'srcdir': '',
@@ -39,16 +39,14 @@ def init():
 
 def main():
 
-	# check the parameters from command line
-	params = init()
-	check = params["initstat"]
+	params = init() 			# init parameters and check usage
+	check = params["initstat"]  # get status of init
 	if check == -1:
 		sys.exit(check)
 
-	cnt = 0 # count number of files processed
-	copycnt = 0  # counter of copied files
-	# load all regular expressions into a list
-	expr_list = load_regex('reg.ini')
+	cnt = 0 							# count number of files processed
+	copycnt = 0  						# counter of copied files
+	expr_list = load_regex('reg.ini')	# load all regular expressions into a list
 
 	# scan all directories and search for image/video files
 	if os.path.isdir(params["srcdir"]):
@@ -67,7 +65,7 @@ def main():
 
 				if datetime != 'None':
 					# if a date was found using EXIF
-					dateval = splitdatetime(datetime)
+					dateval = split_datetime(datetime)
 					newfilename = setnewdst(file, dateval[0], dateval[1], dateval[2])
 				else:
 					# try to search a matching pattern
@@ -86,7 +84,6 @@ def main():
 					# need to copy file to new location
 					if copyfile(curfile, newfile):
 						copycnt+=1
-
 
 	dprint('Processed ' + str(cnt) + ' files!')
 	dprint('Only ' + str(copycnt) + ' files were copied!')

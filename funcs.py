@@ -11,16 +11,18 @@ def getime():
     # Returns the current date and time in the format YYYYmmDDHHMMSS
     return datetime.now().strftime('%Y:%m:%d %H:%M:%S')
 
+
 def dprint (s):
     # print the current time before str
     try:
-        print(getime() + ' ' + s)
+        print(getime() + ' ' + str(s))
 
     except Exception as err:
         print(err)
         pass
 
     return
+
 
 def load_regex(filename):
     # read all regular expressions from ini file
@@ -36,7 +38,9 @@ def load_regex(filename):
         list.append([r,d,m,y])
     return list
 
+
 def get_original_datetime(file):
+
     dt = None  # init dt (date time) variable
     try:
         f = open(file, 'rb')
@@ -52,9 +56,11 @@ def get_original_datetime(file):
 
     return dt
 
+
 def getsubstr(str, pos):
     f, t = pos.split(':')
     return str[int(f):int(t)]
+
 
 def setnewdst(file, y, m, d):
     # set new file location in the format:
@@ -63,11 +69,12 @@ def setnewdst(file, y, m, d):
     return os.path.join(y, y + '_' + m, y + '-' + m + '-' + d, file)
 
 
-def splitdatetime(dt):
+def split_datetime(dt):
     # gets a date and time YYYY:MM:DD HH:mm:ss and return the Year, Month and Day
     date = dt.split(" ")
     y, m, d = date[0].split(":")
     return y, m, d
+
 
 def searchregex(file, list):
     # list is [[expr,day,month,year],[expr,day,month,year],....]
@@ -85,7 +92,7 @@ def searchregex(file, list):
     return newfilename
 
 
-def copyfile(curfile: object, newfile: object) -> object:
+def copyfile(curfile, newfile):
     newdir = os.path.dirname(newfile)
     remove = True  # boolean variable to determine if need to delete the file after a successful copy operation
     copy = True  # boolean variable to determine if need to copy file
