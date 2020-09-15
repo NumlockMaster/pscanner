@@ -9,3 +9,5 @@ pscanner.py will try to get the date from the picture file using exifread librar
 All the regular expressions are written in the reg.ini file.<br>
 <br>
 The new directory structure will be created as: YYYY\YYYY_MM\YYYY-MM-DD (year\year_mon\year-mon-day). 
+<br><br>
+Usage: pscanner.py \[-c\] \<source directory\> \<destination directory\>
