@@ -12,3 +12,5 @@ The new directory structure will be created as: YYYY\YYYY_MM\YYYY-MM-DD (year\ye
 <br><br>
 Usage: pscanner.py \[-c\] \<source directory\> \<destination directory\>
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -c - move files from source to destination
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if you omit the -c then files will <b>NOT</b> be moved!
+
